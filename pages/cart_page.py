@@ -1,6 +1,8 @@
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
-from pages.base_page import BasePage
+from pages.base_page import TIMEOUT, BasePage
 
 
 class CartPage(BasePage):
@@ -13,9 +15,13 @@ class CartPage(BasePage):
         return self.text_of(self.TITLE)
 
     def item_names(self):
-        if not self.is_present(self.ITEM_NAMES):
+        # Re-query inside the wait so a re-rendered DOM (stale element) is retried.
+        try:
+            return WebDriverWait(
+                self.driver, TIMEOUT, ignored_exceptions=(StaleElementReferenceException,)
+            ).until(lambda d: [e.text for e in d.find_elements(*self.ITEM_NAMES)] or None)
+        except TimeoutException:
             return []
-        return [e.text for e in self.driver.find_elements(*self.ITEM_NAMES)]
 
     def remove(self, product_name):
         slug = product_name.lower().replace(" ", "-")

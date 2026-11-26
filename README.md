@@ -46,8 +46,8 @@ Tests are tagged `smoke` (critical flows) and `regression` (everything).
 ## Setup
 
 ```bash
-git clone https://github.com/Belaalos/saucedemo-selenium-pytest.git
-cd saucedemo-selenium-pytest
+git clone https://github.com/Belaalos/storefront-ui-regression-suite.git
+cd storefront-ui-regression-suite
 python -m venv .venv
 # Windows: .venv\Scripts\activate    |    macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
